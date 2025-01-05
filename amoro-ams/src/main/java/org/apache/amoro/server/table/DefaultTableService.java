@@ -381,7 +381,7 @@ public class DefaultTableService extends StatedPersistentBase implements TableSe
   public void addHandlerChain(RuntimeHandlerChain handler) {
     checkNotStarted();
     if (headHandler == null) {
-      headHandler = handler;
+      headHandler = handler;// like the header of link-list
     } else {
       headHandler.appendNext(handler);
     }

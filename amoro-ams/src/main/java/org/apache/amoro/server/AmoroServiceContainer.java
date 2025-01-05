@@ -150,7 +150,10 @@ public class AmoroServiceContainer {
     optimizingService = new DefaultOptimizingService(serviceConfig, tableService);
 
     LOG.info("Setting up AMS table executors...");
+    //init variety executor
     AsyncTableExecutors.getInstance().setup(tableService, serviceConfig);
+
+    //add chain for each executor
     addHandlerChain(optimizingService.getTableRuntimeHandler());
     addHandlerChain(AsyncTableExecutors.getInstance().getDataExpiringExecutor());
     addHandlerChain(AsyncTableExecutors.getInstance().getSnapshotsExpiringExecutor());
@@ -162,6 +165,8 @@ public class AmoroServiceContainer {
     addHandlerChain(AsyncTableExecutors.getInstance().getHiveCommitSyncExecutor());
     addHandlerChain(AsyncTableExecutors.getInstance().getTableRefreshingExecutor());
     addHandlerChain(AsyncTableExecutors.getInstance().getTagsAutoCreatingExecutor());
+
+    //build a link like :TableRuntime->DataExpiringExecutor->SnapshotsExpiringExecutor->OrphanFilesCleaningEx-> .........
     tableService.initialize();
     LOG.info("AMS table service have been initialized");
     terminalManager = new TerminalManager(serviceConfig, tableService);
