@@ -167,7 +167,8 @@ public class AmoroServiceContainer {
     addHandlerChain(AsyncTableExecutors.getInstance().getTagsAutoCreatingExecutor());
 
     //build a link like :TableRuntime->DataExpiringExecutor->SnapshotsExpiringExecutor->OrphanFilesCleaningEx-> .........
-    tableService.initialize();
+    tableService.initialize();// run chain from header，
+
     LOG.info("AMS table service have been initialized");
     terminalManager = new TerminalManager(serviceConfig, tableService);
 

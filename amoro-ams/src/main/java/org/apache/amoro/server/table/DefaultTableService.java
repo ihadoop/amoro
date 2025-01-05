@@ -418,7 +418,7 @@ public class DefaultTableService extends StatedPersistentBase implements TableSe
           tableRuntimes.add(tableRuntime);
         });
 
-    if (headHandler != null) {
+    if (headHandler != null) { // TableRuntimeHandlerImpl
       headHandler.initialize(tableRuntimes);
     }
     if (tableExplorerExecutors == null) {
