@@ -18,8 +18,10 @@
 
 package org.apache.amoro.optimizer.common;
 
+import org.apache.amoro.SystemCommand;
 import org.apache.amoro.api.OptimizingTask;
 import org.apache.amoro.api.OptimizingTaskResult;
+import org.apache.amoro.api.TaskType;
 import org.apache.amoro.optimizing.OptimizingExecutor;
 import org.apache.amoro.optimizing.OptimizingExecutorFactory;
 import org.apache.amoro.optimizing.OptimizingInputProperties;
@@ -39,7 +41,7 @@ public class OptimizerExecutor extends AbstractOptimizerOperator {
   protected static final int ERROR_MESSAGE_MAX_LENGTH = 4000;
 
   private final int threadId;
-
+  private Optimizer optimizer;
   public OptimizerExecutor(OptimizerConfig config, int threadId) {
     super(config);
     this.threadId = threadId;
@@ -50,6 +52,11 @@ public class OptimizerExecutor extends AbstractOptimizerOperator {
       try {
         OptimizingTask task = pollTask();
         if (task != null && ackTask(task)) {
+          TaskType  taskType = task.getTaskType();
+          if (TaskType.SYSTEM.equals(taskType)) {
+            executeSystemTask(task);
+            continue;
+          }
           OptimizingTaskResult result = executeTask(task);
           completeTask(result);
         }
@@ -57,6 +64,13 @@ public class OptimizerExecutor extends AbstractOptimizerOperator {
         LOG.error("Optimizer executor[{}] got an unexpected error", threadId, t);
       }
     }
+  }
+
+  private void executeSystemTask(OptimizingTask task) {
+    task.getTaskInput();
+    SystemCommand systemCommand = SerializationUtil.simpleDeserialize(task.getTaskInput());
+    optimizer.stopOptimizing();
+    System.exit(1);
   }
 
   public int getThreadId() {
@@ -170,5 +184,9 @@ public class OptimizerExecutor extends AbstractOptimizerOperator {
       errorResult.setErrorMessage(ExceptionUtil.getErrorMessage(t, ERROR_MESSAGE_MAX_LENGTH));
       return errorResult;
     }
+  }
+
+  public void setOptimzer(Optimizer optimizer) {
+    this.optimizer  = optimizer;
   }
 }

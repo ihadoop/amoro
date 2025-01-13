@@ -21,6 +21,7 @@ public class OptimizingTask implements org.apache.amoro.shade.thrift.org.apache.
   public @org.apache.amoro.shade.thrift.org.apache.thrift.annotation.Nullable OptimizingTaskId taskId; // required
   public @org.apache.amoro.shade.thrift.org.apache.thrift.annotation.Nullable java.nio.ByteBuffer taskInput; // optional
   public @org.apache.amoro.shade.thrift.org.apache.thrift.annotation.Nullable java.util.Map<java.lang.String,java.lang.String> properties; // optional
+  public @org.apache.amoro.shade.thrift.org.apache.thrift.annotation.Nullable TaskType taskType; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.amoro.shade.thrift.org.apache.thrift.TFieldIdEnum {
@@ -108,6 +109,7 @@ public class OptimizingTask implements org.apache.amoro.shade.thrift.org.apache.
   }
 
   public OptimizingTask() {
+    taskType = TaskType.OPTIMIZE;
   }
 
   public OptimizingTask(
@@ -202,6 +204,10 @@ public class OptimizingTask implements org.apache.amoro.shade.thrift.org.apache.
     if (!value) {
       this.taskInput = null;
     }
+  }
+
+  public TaskType getTaskType() {
+    return this.taskType;
   }
 
   public int getPropertiesSize() {

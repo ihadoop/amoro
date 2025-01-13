@@ -45,6 +45,9 @@ public class Optimizer {
     this.config = config;
     this.toucher = toucherFactory.get();
     this.executors = new OptimizerExecutor[config.getExecutionParallel()];
+    for (OptimizerExecutor executor : executors) {
+      executor.setOptimzer(this);
+    }
     IntStream.range(0, config.getExecutionParallel())
         .forEach(i -> executors[i] = executorFactory.apply(i));
     if (config.getResourceId() != null) {
