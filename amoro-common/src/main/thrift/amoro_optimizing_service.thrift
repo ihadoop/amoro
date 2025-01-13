@@ -20,10 +20,16 @@ namespace java org.apache.amoro.api
 
 include "amoro_commons.thrift"
 
+enum TaskType {
+  SYSTEM = 0,
+  OPTIMIZE = 1,
+}
+
 struct OptimizingTask {
     1: OptimizingTaskId taskId;
     2: optional binary taskInput;
     3: optional map<string, string> properties;
+    4: optional TaskType taskType = 1;
 }
 
 struct OptimizingTaskId {
